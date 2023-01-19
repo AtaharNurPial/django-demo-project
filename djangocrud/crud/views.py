@@ -3,7 +3,7 @@ from django.http import HttpResponse
 # Create your views here.
 
 def greetings(request):
-    return HttpResponse("greetings from django...")
-
+    return render(request, "home.html")
+    
 def chat_room(request):
     return HttpResponse("Initiating chatroom...")

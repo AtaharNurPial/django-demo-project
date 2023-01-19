@@ -56,7 +56,10 @@ ROOT_URLCONF = "djangocrud.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # template dirs here
+        "DIRS": [
+            BASE_DIR / "templates/demo"
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
