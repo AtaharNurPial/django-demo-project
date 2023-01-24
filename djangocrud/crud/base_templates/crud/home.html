@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+
+{% block content%}
+
+<h1>HomePage</h1>
+
+<br>
+<div>
+    <div>
+        <b>Available Rooms:</b>
+        {% for room in chat_rooms%}
+            <div>
+                <ul>
+                    <li>{{room.id}} -> {{room.name}}</li>
+                </ul>
+            </div>
+        {% endfor%}
+    </div>
+</div>
+
+
+{%endblock content%}

@@ -1,9 +1,18 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+
 # Create your views here.
 
+
+chat_rooms = [
+    {"id":1,"name":"Talk FCB"},
+    {"id":2,"name":"Talk Crypto"},
+    {"id":3,"name":"Talk Python"},
+    {"id":4,"name":"Talk Django"},
+]
+
 def greetings(request):
-    return render(request, "home.html")
+    context = {"chat_rooms":chat_rooms}
+    return render(request, "crud/home.html", context)
     
 def chat_room(request):
-    return HttpResponse("Initiating chatroom...")
+    return render(request, "crud/room.html")
