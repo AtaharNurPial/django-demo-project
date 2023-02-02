@@ -14,5 +14,10 @@ def greetings(request):
     context = {"chat_rooms":chat_rooms}
     return render(request, "crud/home.html", context)
     
-def chat_room(request):
-    return render(request, "crud/room.html")
+def chat_room(request, pk):
+    chat_room = None
+    for room in chat_rooms:
+        if room['id'] == int(pk):
+            chat_room = room
+    context = {"room":chat_room}
+    return render(request, "crud/room.html", context)

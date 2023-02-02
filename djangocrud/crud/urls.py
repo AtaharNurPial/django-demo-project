@@ -6,5 +6,5 @@ from . import views
 urlpatterns = [
     # path("admin/", admin.site.urls),
     path("", views.greetings, name="home"),
-    path("chat/",views.chat_room, name="chat"),
+    path("room/<str:pk>/",views.chat_room, name="room"),
 ]
