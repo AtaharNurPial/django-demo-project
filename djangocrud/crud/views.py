@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -19,10 +20,11 @@ chat_rooms = [
 ]
 
 def signin_page(request):
-    context = {}
+    page = 'signin'
+    context = {"page": page}
     if request.user.is_authenticated:
         return redirect('home')
-        
+
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -46,6 +48,23 @@ def signout_user(request):
     logout(request)
 
     return redirect('home')
+
+def signup_user(request):
+    reg_form = UserCreationForm()
+    context = {"form": reg_form}
+
+    if request.method == "POST":
+        auth_form = UserCreationForm(request.POST)
+        if auth_form.is_valid():
+            auth_user = auth_form.save(commit=False)
+            auth_user.username = auth_user.username.lower()
+            auth_user.save()
+            login(request, auth_user)
+            return redirect('home')
+        else:
+            messages.error(request,'Error occurred during Signup')
+    
+    return render(request, 'crud/signup_signin.html', context)
 
 def greetings(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''

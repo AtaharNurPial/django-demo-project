@@ -7,6 +7,7 @@ urlpatterns = [
     # path("admin/", admin.site.urls),
     path("signin/",views.signin_page, name="signin"),
     path("signout/",views.signout_user, name="signout"),
+    path("signup/",views.signup_user, name="signup"),
     path("", views.greetings, name="home"),
     path("room/<str:room_id>/",views.chat_room, name="room"),
     path("create-room/",views.createRoom, name="create-room"),
