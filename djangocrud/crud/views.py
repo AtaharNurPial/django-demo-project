@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import ChatRoom
+from django.db.models import Q
+from .models import ChatRoom, Topic
 from .forms import RoomForm
 
 # Create your views here.
@@ -13,9 +14,18 @@ chat_rooms = [
 ]
 
 def greetings(request):
-    rooms_db = ChatRoom.objects.all()
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    rooms_db = ChatRoom.objects.filter(
+        Q(topic__name__icontains=q) |
+        Q(name__icontains=q) |
+        Q(description__contains=q)
+        )  # filter with topic name, room name, description (case insensitive)
+    # rooms_db = ChatRoom.objects.all()
+    topics = Topic.objects.all()
+    room_count = rooms_db.count()   # also could use python len()
     context = {"chat_rooms":chat_rooms}
-    context_db = {"chat_rooms":rooms_db}
+    context_db = {"chat_rooms":rooms_db, "topics": topics, "room_count": room_count,}
     
     return render(request, "crud/home.html", context_db)
     
