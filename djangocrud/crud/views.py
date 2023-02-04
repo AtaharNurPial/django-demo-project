@@ -19,7 +19,7 @@ def greetings(request):
     
 def chat_room(request, pk):
     """
-    snippets for locally hosted data dict i.e: chat_rooms dictionary
+    snippets for locally stored data dict i.e: chat_rooms dictionary
     chat_room = None
     for room in chat_rooms:
         if room['id'] == int(pk):
