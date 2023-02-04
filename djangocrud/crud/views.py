@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -18,6 +20,9 @@ chat_rooms = [
 
 def signin_page(request):
     context = {}
+    if request.user.is_authenticated:
+        return redirect('home')
+        
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -72,6 +77,8 @@ def chat_room(request, room_id):
     
     return render(request, "crud/room.html", context)
 
+
+@login_required(login_url='signin')
 def createRoom(request):
     create_room_form = RoomForm()
     if request.method == 'POST':
@@ -84,9 +91,15 @@ def createRoom(request):
    
     return render(request, 'crud/room_form.html', context)
 
+
+@login_required(login_url='signin')
 def updateRoom(request, room_id):
     room = ChatRoom.objects.get(id=room_id)
     form = RoomForm(instance=room)
+
+    if request.user != room.host:
+        return HttpResponse('User Restricted!!')
+
     if request.method == "POST":
         response_form = RoomForm(request.POST, instance=room)
         if response_form.is_valid():
@@ -97,9 +110,14 @@ def updateRoom(request, room_id):
     
     return render(request, 'crud/room_form.html', context)
 
+
+@login_required(login_url='signin')
 def deleteRoom(request, room_id):
     room = ChatRoom.objects.get(id=room_id)
     context = {'item':room}
+
+    if request.user != room.host:
+        return HttpResponse('User Restricted!!')
 
     if request.method == "POST":
         room.delete()

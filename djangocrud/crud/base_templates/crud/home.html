@@ -33,8 +33,10 @@
             <b>Available Rooms: {{room_count}} rooms available </b>
             {% for room in chat_rooms%}
             <div>
+                {% if request.user == room.host %}
                 <a href="{% url 'update-room' room.id %}">EditRoom</a>
                 <a href="{% url 'delete-room' room.id %}">DeleteRoom</a>
+                {% endif %}
                 <span>@{{room.host.username}}</span>
                 <ul>
                 <!-- <li>{{room.id}} -> <a href="room/{{room.id}}"> {{room.name}} </a></li> -->
