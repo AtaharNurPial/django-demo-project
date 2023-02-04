@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.models import Q
-from .models import ChatRoom, Topic
+from .models import ChatRoom, Topic, Message
 from .forms import RoomForm
 
 # Create your views here.
@@ -91,8 +91,19 @@ def chat_room(request, room_id):
             chat_room = room
     context = {"room":chat_room}
     """
-    chat_rooms = ChatRoom.objects.get(id=room_id)
-    context = {"room":chat_rooms}
+    chat_room = ChatRoom.objects.get(id=room_id)
+    room_messages = chat_room.message_set.all().order_by('-created_at')
+    participants = chat_room.participants.all()
+
+    if request.method == "POST":
+        new_message = Message.objects.create(
+            user=request.user,
+            room=chat_room,
+            body=request.POST.get('body')
+        )
+        chat_room.participants.add(request.user)
+        return redirect('room',room_id=chat_room.id)
+    context = {"room":chat_room, "room_messages": room_messages, "participants": participants}
     
     return render(request, "crud/room.html", context)
 
@@ -140,6 +151,21 @@ def deleteRoom(request, room_id):
 
     if request.method == "POST":
         room.delete()
+        return redirect('home')
+    
+    return render(request, 'crud/delete.html', context)
+
+
+@login_required(login_url='signin')
+def deleteMessage(request, message_id):
+    room_message = Message.objects.get(id=message_id)
+    context = {'item':room_message}
+
+    if request.user != room_message.user:
+        return HttpResponse('User Restricted!!')
+
+    if request.method == "POST":
+        room_message.delete()
         return redirect('home')
     
     return render(request, 'crud/delete.html', context)
