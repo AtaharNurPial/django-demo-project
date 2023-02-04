@@ -20,6 +20,9 @@ class ChatRoom(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # takes time snapshot once during creation
     updated_at = models.DateTimeField(auto_now=True)    # takes time snapshot everytime an instance is called
 
+    class Meta():
+        ordering = ['-updated_at','-created_at']
+
     def __str__(self):
         return self.name
 
