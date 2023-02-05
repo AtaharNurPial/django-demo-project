@@ -10,6 +10,7 @@ urlpatterns = [
     path("signup/",views.signup_user, name="signup"),
     path("", views.greetings, name="home"),
     path("room/<str:room_id>/",views.chat_room, name="room"),
+    path("profile/<str:user_id>",views.user_profile, name="profile"),
     path("create-room/",views.createRoom, name="create-room"),
     path("update-room/<str:room_id>/",views.updateRoom, name="update-room"),
     path("delete-room/<str:room_id>/",views.deleteRoom, name="delete-room"),

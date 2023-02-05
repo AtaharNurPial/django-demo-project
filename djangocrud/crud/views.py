@@ -110,6 +110,16 @@ def chat_room(request, room_id):
     return render(request, "crud/room.html", context)
 
 
+def user_profile(request, user_id):
+    user = User.objects.get(id=user_id)
+    chat_rooms = user.chatroom_set.all()
+    topics = Topic.objects.all()
+    room_messages = user.message_set.all()
+    context = {"user": user, "chat_rooms": chat_rooms, "topics": topics, "room_messages": room_messages}
+
+    return render(request, 'crud/user_profile.html', context)
+
+
 @login_required(login_url='signin')
 def createRoom(request):
     create_room_form = RoomForm()
