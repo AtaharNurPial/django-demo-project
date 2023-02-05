@@ -1,0 +1,22 @@
+<div>
+    {% for room in chat_rooms%}
+    <div>
+        {% if request.user == room.host %}
+        <a href="{% url 'update-room' room.id %}">EditRoom</a>
+        <a href="{% url 'delete-room' room.id %}">DeleteRoom</a>
+        {% endif %}
+        <span>@{{room.host.username}}</span>
+        <ul>
+        <!-- <li>{{room.id}} -> <a href="room/{{room.id}}"> {{room.name}} </a></li> -->
+            <li>
+                {{room.id}} -> <a href="{%url 'room' room.id%}"> {{room.name}} </a>
+            </li>
+        </ul>
+        <b>Available Topics: </b>
+        <ul>
+            <li><small>{{room.topic.name}}</small></li>
+        </ul>
+        <hr />
+    </div>
+    {% endfor%}
+</div>

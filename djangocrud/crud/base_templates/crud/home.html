@@ -5,23 +5,15 @@
 <style>
     .home-container {
         display: grid;
-        grid-template-columns: 1fr 3fr;
+        grid-template-columns: 1fr 3fr 1fr;
     }
 </style>
 
 <div class="home-container">
     <div>
-        <h3>BROWSE TOPICS</h3>
-        <hr>
-        <div>
-            <a href="{% url 'home' %}">All</a>
-        </div>
-        {% for topic in topics %}
-        <div>
-            <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
-        </div>
-        {% endfor %}
+        {% include 'crud/topic_comp.html' %}
     </div>
+
     <div>
         <div>
             <h1>HomePage</h1>
@@ -29,29 +21,12 @@
         </div>
        
         <a href="{% url 'create-room' %}"> Create Room </a>
-        <div>
-            <b>Available Rooms: {{room_count}} rooms available </b>
-            {% for room in chat_rooms%}
-            <div>
-                {% if request.user == room.host %}
-                <a href="{% url 'update-room' room.id %}">EditRoom</a>
-                <a href="{% url 'delete-room' room.id %}">DeleteRoom</a>
-                {% endif %}
-                <span>@{{room.host.username}}</span>
-                <ul>
-                <!-- <li>{{room.id}} -> <a href="room/{{room.id}}"> {{room.name}} </a></li> -->
-                    <li>
-                        {{room.id}} -> <a href="{%url 'room' room.id%}"> {{room.name}} </a>
-                    </li>
-                </ul>
-                <b>Available Topics: </b>
-                <ul>
-                    <li><small>{{room.topic.name}}</small></li>
-                </ul>
-                <hr />
-            </div>
-            {% endfor%}
-        </div>
+        <div><b>Available Rooms: {{room_count}} rooms available </b></div>
+        {% include 'crud/feed_comp.html' %}
+    </div>
+
+    <div>
+        {% include 'crud/activity_comp.html' %}
     </div>
 </div>
 

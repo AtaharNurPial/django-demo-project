@@ -77,8 +77,10 @@ def greetings(request):
     # rooms_db = ChatRoom.objects.all()
     topics = Topic.objects.all()
     room_count = rooms_db.count()   # also could use python len()
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
     context = {"chat_rooms":chat_rooms}
-    context_db = {"chat_rooms":rooms_db, "topics": topics, "room_count": room_count,}
+    context_db = {"chat_rooms":rooms_db, "topics": topics, "room_count": room_count,
+        "room_messages": room_messages,}
     
     return render(request, "crud/home.html", context_db)
     
@@ -92,7 +94,7 @@ def chat_room(request, room_id):
     context = {"room":chat_room}
     """
     chat_room = ChatRoom.objects.get(id=room_id)
-    room_messages = chat_room.message_set.all().order_by('-created_at')
+    room_messages = chat_room.message_set.all()
     participants = chat_room.participants.all()
 
     if request.method == "POST":
