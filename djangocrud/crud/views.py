@@ -123,15 +123,20 @@ def user_profile(request, user_id):
 @login_required(login_url='signin')
 def createRoom(request):
     create_room_form = RoomForm()
+    topics = Topic.objects.all()
     if request.method == 'POST':
-        response_form = RoomForm(request.POST)
-        if response_form.is_valid():
-            form_response = response_form.save(commit=False)
-            form_response.host = request.user
-            form_response.save()
-            return redirect('home')
+        topic_name = request.POST.get('topic')
+        topic, isNew = Topic.objects.get_or_create(name=topic_name)     # creates a new object if isNew is true
+        
+        ChatRoom.objects.create(
+            host=request.user,
+            topic=topic,
+            name=request.POST.get('name'),
+            description=request.POST.get('description'),
+        )
+        return redirect('home')
 
-    context = {"form":create_room_form}
+    context = {"form":create_room_form, "topics": topics}
    
     return render(request, 'crud/room_form.html', context)
 
@@ -140,17 +145,24 @@ def createRoom(request):
 def updateRoom(request, room_id):
     room = ChatRoom.objects.get(id=room_id)
     form = RoomForm(instance=room)
+    topics = Topic.objects.all()
 
     if request.user != room.host:
         return HttpResponse('User Restricted!!')
 
     if request.method == "POST":
-        response_form = RoomForm(request.POST, instance=room)
-        if response_form.is_valid():
-            response_form.save()
-            return redirect('home')
+        topic_name = request.POST.get('topic')
+        topic, isNew = Topic.objects.get_or_create(name=topic_name)
+        # response_form = RoomForm(request.POST, instance=room)
+        # if response_form.is_valid():
+        #     response_form.save()
+        room.name = request.POST.get('name')
+        room.topic = topic
+        room.description = request.POST.get('description')
+        room.save()
+        return redirect('home')
 
-    context = {"form": form}
+    context = {"form": form, "topics": topics, "room": room}
     
     return render(request, 'crud/room_form.html', context)
 
