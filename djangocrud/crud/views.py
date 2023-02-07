@@ -121,6 +121,15 @@ def user_profile(request, user_id):
 
 
 @login_required(login_url='signin')
+def update_profile(request):
+
+
+    context = {}
+
+    return render(request, 'crud/update_user_profile.html', context)
+
+
+@login_required(login_url='signin')
 def createRoom(request):
     create_room_form = RoomForm()
     topics = Topic.objects.all()
