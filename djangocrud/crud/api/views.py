@@ -1,4 +1,5 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from crud.models import ChatRoom
 from .serializer import *
@@ -16,6 +17,7 @@ def getRoutes(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getRooms(request):
     rooms = ChatRoom.objects.all()
     serialized_rooms = ChatRoomSerializer(rooms, many=True)
@@ -23,6 +25,7 @@ def getRooms(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getRoomById(request,room_id):
     room = ChatRoom.objects.get(id=room_id)
     serialized_room = ChatRoomSerializer(room, many=False)
