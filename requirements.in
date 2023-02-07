@@ -6,3 +6,4 @@ pygments==2.14.0
 django-filter==22.1
 django-guardian==2.4.0
 django-cors-headers==3.13.0
+djangorestframework_simplejwt==5.2.2

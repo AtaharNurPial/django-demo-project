@@ -13,6 +13,7 @@ django==4.1.5
     #   django-filter
     #   django-guardian
     #   djangorestframework
+    #   djangorestframework-simplejwt
 django-cors-headers==3.13.0
     # via -r requirements.in
 django-filter==22.1
@@ -20,11 +21,17 @@ django-filter==22.1
 django-guardian==2.4.0
     # via -r requirements.in
 djangorestframework==3.14.0
+    # via
+    #   -r requirements.in
+    #   djangorestframework-simplejwt
+djangorestframework-simplejwt==5.2.2
     # via -r requirements.in
 markdown==3.4.1
     # via -r requirements.in
 pygments==2.14.0
     # via -r requirements.in
+pyjwt==2.6.0
+    # via djangorestframework-simplejwt
 python-decouple==3.7
     # via -r requirements.in
 pytz==2022.7.1
